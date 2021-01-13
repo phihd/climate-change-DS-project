@@ -1,0 +1,46 @@
+---
+title: "Untitled"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+library(data.table)
+library(forecast)
+library(dplyr)
+library(magrittr)
+library(tseries)
+library(gridExtra)
+library(ggplot2)
+options(repr.plot.width=18, repr.plot.height=12)
+```
+
+```{r}
+temp = read.csv("global_surface_temperature_anomalies.csv", header=T)
+TS_temp = ts(temp$Avg_Anomaly_deg_C, frequency = 12)
+df_train = temp[1:1560,1:2]
+df_test = temp[1561:1680,1:2]
+TS_train = ts(df_train$Avg_Anomaly_deg_C, frequency = 12)
+TS_test = ts(df_test$Avg_Anomaly_deg_C, frequency = 12)
+TS_test
+par(mfrow=c(1,2),mar=c(2.5,2.5,3.5,1.5))
+```  
+
+Using auto ARIMA to find the best possible model to describe the time series.
+```{r}
+arima_temp = auto.arima(TS_train, stepwise=FALSE, approximation=FALSE)
+arima_temp
+acf(arima_temp$res,main="ARIMA model - ACF of residuals", lag.max=50)
+pacf(arima_temp$res,main="ARIMA model - PACF of residuals", lag.max=50)
+```  
+
+```{r}
+forecast = Arima(TS_test, model = arima_temp)
+accuracy(forecast)
+
+plot(forecast$fitted,type="b",col="blue", ylab="Temp",xlab="Year")
+lines(TS_test,col="red",type="b")
+```  
