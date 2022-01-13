@@ -10,7 +10,7 @@ The project was reported in the course CS-C3250 Data Science Project in December
 The project was supervised by Jorma Laaksonen from Aalto Univeristy and instructed by Janne Sinkkonen from Reaktor.
 
 ## Documents
-Find the file Final_Report_DS_Project.pdf for the final report.
+https://github.com/phihd/climate-change-DS-project/blob/master/Final_Report_DS_Project.pdf
 
 ## Website
 https://climate-change-c3250-2020.herokuapp.com/
